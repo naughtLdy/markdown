@@ -93,8 +93,12 @@ trait HtmlTrait
 			if (in_array($tag, $this->selfClosingHtmlElements)) {
 				$level--;
 			}
+			$parse = new \cebe\markdown\Markdown();
 			for ($i = $current, $count = count($lines); $i < $count; $i++) {
 				$line = $lines[$i];
+				if ($line[$i] !== '<') {
+					$line = $parse->parse($line);
+				}
 				$content[] = $line;
 				$level += substr_count($line, "<$tag") - substr_count($line, "</$tag>") - substr_count($line, "/>");
 				if ($level <= 0) {
